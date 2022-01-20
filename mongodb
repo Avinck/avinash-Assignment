@@ -1,3 +1,4 @@
+1st assignment
 # creating database
 use mongo_practice
 #created colletction name movies and insert one data
@@ -67,7 +68,37 @@ db.comments.find({username: "ScumbagSteve"})
 db.comments.find({post :"61e5c67bc04247c55c3dff82"}).pretty
 # Created a new database named "population" and created a new collection "zipcodes" ,inserted json data in zipcodes using mongoDB compass.
 
+2nd assignment
 # ATLANTA Population
-1.db.zipcodes.aggregate([{$match:{city:"ATLANTA",state:"GA"}}]).pretty()
-2.
-3.db.zipcodes.aggregate([{$group:{_id:"$state",population:{$sum:"$pop"}}}])
+#1-db.zipcodes.aggregate([{$match:{city:"ATLANTA",state:"GA"}}]).pretty()
+#2-population of ATLANTA
+db.zipcodes.aggregate( [
+    {$match:{city:"ATLANTA"}},
+   { $group: { _id: { city: "$city"}, pop: { $sum: "$pop" } } }
+] )
+
+#3-calculate population of each state
+db.zipcodes.aggregate( [
+    { $group: { _id: { state: "$state"}, pop: { $sum: "$pop" } } }
+ ] )
+
+ #4- sorting of each State by highest population first
+ db.zipcodes.aggregate( [
+    { $group: { _id: { state: "$state"}, pop: { $sum: "$pop" } } },
+    {$sort:{pop:-1}} 
+ ] )
+
+ #5-limit result for 1st 3
+ db.zipcodes.aggregate( [
+    { $group: { _id: { state: "$state"}, pop: { $sum: "$pop" } } },
+    {$sort:{pop:-1}},
+    {$limit:3}
+ ] )
+
+ #6-total population of each city and sort by hightest to limit=3
+ db.zipcodes.aggregate( [
+    { $group: { _id: {city:"$city",state: "$state"},pop: { $sum: "$pop" } } },
+    {$sort:{pop:-1}},
+    {$limit:3}
+ ] )
+
